@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gout648.github.io/puntea-edu-md/sitemap.xml
