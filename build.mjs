@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto'
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { catalog, urls, verified } from './catalog.mjs'
 import { evidence } from './research.mjs'
+import { actions, criteria, modules, priorities } from './feedback.mjs'
+import { pilot } from './feedback-pilot.mjs'
 import { audienceKeys, audiences, categories, kindToCategory, mainCategories } from './src/taxonomy.mjs'
 
 const site = process.argv[2] ? new URL(process.argv[2]).href.replace(/\/$/, '') : ''
@@ -15,7 +17,7 @@ const calendarDate = new Intl.DateTimeFormat('ro-MD', { day: 'numeric', month: '
 const formatDate = value => calendarDate.format(new Date(value + 'T12:00:00Z'))
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
 const pathFor = item => 'o/' + item.id + '/'
-const paths = ['', 'practica/', 'solutie/', 'documentatie/', ...catalog.map(pathFor)]
+const paths = ['', 'practica/', 'solutie/', 'documentatie/', 'feedback/', ...catalog.map(pathFor)]
 const example = {
   id: 'ecuatii',
   title: 'Ecuații de gradul I',
@@ -45,6 +47,7 @@ function layout(title, description, path, body) {
   <link rel="icon" href="${base}assets/mark.svg" type="image/svg+xml">
   ${mirror ? '' : `<link rel="manifest" href="${base}manifest.webmanifest"><link rel="apple-touch-icon" href="${base}assets/app-192.png">`}
   <link rel="stylesheet" href="${base}assets/style.css?v=4"><script src="${script}" defer></script>
+  ${path === 'feedback/' ? '<link rel="stylesheet" href="../assets/feedback.css">' : ''}
 </head>
 <body>
   <a class="skip" href="#continut">Sari la conținut</a>
@@ -53,7 +56,7 @@ function layout(title, description, path, body) {
     <nav aria-label="Navigare principală">${link(base + '#catalog', 'Caută')}${link(community, 'Comunitate')}${link(community + 'cont/', 'Cont')}</nav>
   </header>
   <main id="continut">${body}</main>
-  <footer class="site-footer wrap"><span>Puntea Edu MD <span aria-hidden="true">·</span> Pilot DigiEduHack</span><span>${link((mirror ? referenceSite : base) + 'documentatie/#instalare', 'Instalează aplicația')} · ${link(base + 'documentatie/#surse', 'Surse')}</span></footer>
+  <footer class="site-footer wrap"><span>Puntea Edu MD <span aria-hidden="true">·</span> Pilot DigiEduHack</span><span>${path === '' ? link(base + 'feedback/', 'Feedback DigiEduHack') + ' · ' : ''}${link((mirror ? referenceSite : base) + 'documentatie/#instalare', 'Instalează aplicația')} · ${link(base + 'documentatie/#surse', 'Surse')}</span></footer>
 </body>
 </html>`
 }
@@ -212,6 +215,99 @@ const docs = `<div class="wrap subpage">
   </section>
 </div>`
 
+const textList = entries => '<ul>' + entries.map(item => '<li>' + esc(item) + '</li>').join('') + '</ul>'
+const moduleStats = ['Canvas', 'Dosar', 'Idei active / lăsate', 'Legături confirmate / totale', 'Interviuri la eveniment', 'Casete asumate']
+const feedback = `<article class="wrap subpage feedback">
+  ${link('../#catalog', '← Catalogul Puntea Edu', 'back')}
+  <div class="feedback-hero">
+    <p class="eyebrow">DIGIEDUHACK LEGACY MOLDOVA 2026</p>
+    <h1>Feedback pentru ecosistem</h1>
+    <p class="intro">Starea celor șase module, ce le leagă și ce merită demonstrat înainte de depunere.</p>
+    <p class="muted">Adaptare web a raportului lui Tudor Lapp · <time datetime="2026-11-08T03:36:00+02:00">Situația observată la 8 noiembrie 2026, ora 03:36</time>.</p>
+    <nav class="chips" aria-label="Cuprinsul raportului">
+      ${[['#ecosistem', 'Ecosistem'], ['#module', 'Cele șase module'], ['#criterii', 'Criteriile juriului'], ['#actiuni', 'Pașii propuși'], ['#pilot', 'Pilot'], ['#pitch', 'Pitch']].map(([href, label]) => link(href, label, 'chip')).join('')}
+    </nav>
+  </div>
+
+  <section class="feedback-section" id="ecosistem">
+    <h2>Cum se leagă modulele</h2>
+    <p>Codul ediției ține împreună oferta, mentorul, cercul și fișa de practică. Un exemplu verificat se poate întoarce la oferta de la care a pornit profesorul.</p>
+    <ol class="feedback-flow" aria-label="Bucla principală a ecosistemului">
+      <li><span>M1</span><strong>Găsești oferta</strong></li>
+      <li><span>M2</span><strong>Ceri sprijin</strong></li>
+      <li><span>M3</span><strong>Încerci la clasă</strong></li>
+      <li><span>M5</span><strong>Consemnezi practica</strong></li>
+      <li><span>M1</span><strong>Publici exemplul verificat</strong></li>
+    </ol>
+    <p class="muted">M4 ar trebui să identifice golurile de ofertă. M6 ar trebui să întoarcă decizia motivată pe fișa de pornire.</p>
+    <dl class="feedback-metrics">
+      <div><dt>Perechi cu o legătură confirmată</dt><dd>13 din 15</dd></div>
+      <div><dt>Legături confirmate</dt><dd>31 din 49</dd></div>
+      <div><dt>Module cu un test uman consemnat în caseta 7</dt><dd>0 din 6</dd></div>
+    </dl>
+    <p class="muted">Harta avea 12 legături propuse și 6 în conflict. Perechile M2–M4 și M4–M6 așteptau prima confirmare.</p>
+    <h3>Ce blochează următorul pas</h3>
+    <ol class="feedback-list">${priorities.map(([title, description]) => `<li><strong>${esc(title)}</strong><p>${esc(description)}</p></li>`).join('')}</ol>
+    <h3>Trei parcursuri prin ecosistem</h3>
+    <div class="feedback-roles">
+      <section class="feedback-card"><h4>Profesor</h4><p>Găsește oferta, cere sprijin și documentează o încercare la clasă. Raportul cere un canal de reanunțare și o cale directă de a trimite fișa de practică.</p></section>
+      <section class="feedback-card"><h4>Formator</h4><p>Publică o ediție și poate folosi observațiile din clasă pentru a îmbunătăți cursul. Raportul cere un singur formular pentru ofertă și reguli clare pentru datele profilurilor.</p></section>
+      <section class="feedback-card"><h4>Director sau coordonator</h4><p>Compară oferta și caută goluri confirmate de două categorii de actori. Raportul cere un responsabil pentru decizie și o cale pentru cererile școlilor.</p></section>
+    </div>
+  </section>
+
+  <section class="feedback-section" id="module">
+    <h2>Cele șase module</h2>
+    <nav class="chips" aria-label="Salt la un modul">${modules.map(module => link('#' + module.id, module.id.toUpperCase(), 'chip')).join('')}</nav>
+    <div class="feedback-modules">
+      ${modules.map(module => `<section class="feedback-card" id="${esc(module.id)}">
+        <p class="eyebrow">${esc(module.id.toUpperCase())}</p>
+        <h3>${esc(module.title)}</h3>
+        <p>${esc(module.next)}</p>
+        <details>
+          <summary>Constatări și cifre</summary>
+          <h4>Ce funcționa</h4>${textList(module.strengths)}
+          <h4>Ce cerea lucru</h4>${textList(module.gaps)}
+          <dl class="feedback-stats">${moduleStats.map((label, index) => `<div><dt>${label}</dt><dd>${esc(module.stats[index])}</dd></div>`).join('')}</dl>
+        </details>
+      </section>`).join('')}
+    </div>
+  </section>
+
+  <section class="feedback-section" id="criterii">
+    <h2>Criteriile juriului</h2>
+    <p>Matricea arată dacă raportul a găsit dovezi pentru fiecare criteriu. Este o lectură a documentației la 03:36, înainte de jurizare.</p>
+    <div class="feedback-table" tabindex="0" role="region" aria-label="Matricea criteriilor pentru cele șase module">
+      <table>
+        <caption class="sr-only">Dovezile identificate pe criterii și module</caption>
+        <thead><tr><th scope="col">Criteriu și locul dovezii</th>${modules.map(module => `<th scope="col">${esc(module.id.toUpperCase())}</th>`).join('')}</tr></thead>
+        <tbody>${criteria.map(([title, weight, locator, values]) => `<tr>
+          <th scope="row">${esc(title)} · ${esc(weight)}%<small>${esc(locator)}</small></th>
+          ${values.map(value => `<td><span class="feedback-state" data-evidence="${esc(value)}">${esc(value)}</span></td>`).join('')}
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="feedback-section" id="actiuni">
+    <h2>Ce merită făcut înainte de depunere</h2>
+    <ol class="feedback-list">${actions.map(([title, description]) => `<li><strong>${esc(title)}</strong><p>${esc(description)}</p></li>`).join('')}</ol>
+  </section>
+
+  ${pilot}
+
+  <section class="feedback-section" id="pitch">
+    <h2>Pitch de șapte minute</h2>
+    <p>Urmărește aceeași profesoară de la anunț până la exemplul de practică pe care îl poate folosi un coleg.</p>
+    <ol class="feedback-list">
+      <li><strong>Minutul 0–1</strong><p>Prezintă problema aflării la timp și dovada din raport, cu numărul participanților.</p></li>
+      <li><strong>Minutele 1–3</strong><p>Găsește o ofertă, deschide sursa și păstrează legătura cu mentorul și cercul.</p></li>
+      <li><strong>Minutele 3–5</strong><p>Arată ce a încercat profesoara la clasă, ce a notat și cum revine un exemplu verificat pe fișă.</p></li>
+      <li><strong>Minutele 5–7</strong><p>Arată cum un gol poate ajunge la o decizie motivată și ce veți măsura în pilot.</p></li>
+    </ol>
+  </section>
+</article>`
+
 function save(path, content) {
   const output = new URL(path, dist)
   mkdirSync(new URL('.', output), { recursive: true })
@@ -229,12 +325,13 @@ save('practica/fisa.txt', worksheet('Puntea Edu MD · Fișă de practică'))
 save('solutie/index.html', layout(example.title, 'Activitate pilot de matematică pentru clasa a VII-a, cu reper curricular și fișă de practică.', 'solutie/', solution))
 save('solutie/fisa.txt', worksheet(example.title, ['Ediție: ' + example.id, example.curriculum, 'Sursă: ' + example.source, '', example.activity, '3x + 12 = 42. Verificare: 3 × 10 + 12 = 42.']))
 save('documentatie/index.html', layout('De la căutare la clasă', 'Caută, planifică, lucrează cu alți profesori și împărtășește ce a funcționat la clasă.', 'documentatie/', docs))
+save('feedback/index.html', layout('Feedback DigiEduHack 2026', 'Starea ecosistemului Puntea Edu, cele șase module, criteriile juriului și planul de pilot.', 'feedback/', feedback))
 for (const item of catalog) {
   save(pathFor(item) + 'index.html', layout(item.title, item.summary, pathFor(item), detail(item)))
   save(pathFor(item) + 'fisa.txt', worksheet(item.title, ['Ediție: ' + item.id, item.provider, 'Sursă: ' + item.source, 'Verificat: ' + (item.verified || verified)]))
 }
 mkdirSync(new URL('assets/', dist), { recursive: true })
-for (const name of ['style.css', 'app.js', 'mark.svg', 'bridge.svg']) {
+for (const name of ['style.css', 'feedback.css', 'app.js', 'mark.svg', 'bridge.svg']) {
   copyFileSync(new URL('./src/' + name, import.meta.url), new URL('assets/' + name, dist))
 }
 if (!mirror) {
@@ -247,7 +344,7 @@ if (!mirror) {
     id: './', name: 'Puntea Edu MD', short_name: 'Puntea Edu', lang: 'ro-MD', start_url: './',
     scope: './', display: 'standalone', theme_color: '#f5f5ec', background_color: '#f5f5ec', icons,
   }))
-  const publicPages = [...paths, 'assets/app.js?v=4', 'assets/style.css?v=4', 'assets/mark.svg']
+  const publicPages = [...paths, 'assets/app.js?v=4', 'assets/style.css?v=4', 'assets/feedback.css', 'assets/mark.svg']
   const sw = readFileSync(new URL('./src/sw.js', import.meta.url), 'utf8')
   const fingerprint = createHash('sha256').update(sw)
   for (const path of publicPages) {

@@ -4,6 +4,7 @@ Căutare pentru formarea continuă și oportunitățile din Republica Moldova. O
 
 - [Aplicația cu conturi, recomandări și moderare](https://puntea-edu-md-v1.reedycivet4.chatgpt.site/)
 - [Catalogul pe GitHub Pages](https://gout648.github.io/puntea-edu-md/)
+- [Feedbackul DigiEduHack 2026, adaptat pentru web](https://gout648.github.io/puntea-edu-md/feedback/)
 - [Documentația completă](docs/PLATFORMA.md)
 
 Rulează cu Node.js 24.
