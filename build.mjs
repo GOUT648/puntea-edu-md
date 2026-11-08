@@ -131,7 +131,7 @@ function detail(item) {
 
 const practiceIndex = Object.fromEntries(catalog.map(item => [item.id, item.title]))
 const practice = `<div class="wrap subpage">
-  ${link('../#catalog', '← Catalog', 'back')}
+  <a class="back" href="../#catalog" data-practice-return>← Catalog</a>
   <p class="eyebrow">${tag(2)} ${tag(3)} ${tag(5)}</p>
   <h1>Încearcă. Notează. Repetă.</h1>
   <div class="sheet practice-sheet" id="fisa">
@@ -193,9 +193,11 @@ const flows = [
   [1, 4, 'Ediție și calendar', '↔'],
   [2, 3, 'Sprijin'],
   [3, 5, 'Practică anonimă'],
+  [3, 6, 'Blocaje agregate'],
   [4, 5, 'Sursă și blocaje', '↔'],
   [1, 5, 'Ediție și reper'],
   [5, 1, 'Exemplu verificat'],
+  [5, 2, 'Exemple pentru mentori'],
   [6, 1, 'Decizii'],
 ]
 const docs = `<div class="wrap subpage">
