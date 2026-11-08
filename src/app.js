@@ -17,36 +17,113 @@ document.querySelectorAll('[data-deadline]').forEach(badge => {
 const searchForm = document.querySelector('[data-search-form]')
 if (searchForm) {
   const input = searchForm.elements.q
+  const audience = searchForm.elements.public
+  const filters = [...searchForm.querySelectorAll('[data-filter-category]')]
   const results = document.querySelector('[data-results]')
   const empty = document.querySelector('[data-empty]')
+  const communitySection = document.querySelector('[data-community-results]')
+  const communityList = document.querySelector('[data-community-list]')
+  const communityMore = document.querySelector('[data-community-more]')
+  const community = new URL(searchForm.dataset.community, location.origin)
   const fold = value => value.normalize('NFD').replace(/\p{Mark}/gu, '').toLocaleLowerCase('ro-MD')
   const records = [...document.querySelectorAll('[data-record]')].map(element => ({
     element, index: fold(element.dataset.search),
   }))
+  let category = query.get('categorie') || ''
+  if (!filters.some(button => button.dataset.filterCategory === category)) category = ''
+  audience.value = query.get('public') || ''
+  if (audience.selectedIndex < 0) audience.value = ''
+  input.value = (query.get('q') || '').slice(0, input.maxLength)
+  let timer
+  let pending
 
-  function find() {
-    const terms = fold(input.value.trim()).split(/\s+/)
-    let matches = 0
-    for (const { element, index } of records) {
-      element.hidden = !terms.every(term => index.includes(term))
-      if (!element.hidden) matches += 1
-    }
-    results.textContent = matches === 1 ? '1 fișă' : matches + ' fișe'
-    empty.hidden = matches > 0
+  function showCount(count, hasMore = false) {
+    results.textContent = count === 1 ? '1 rezultat' : count + (hasMore ? '+ rezultate' : ' rezultate')
+    empty.hidden = count > 0
   }
 
-  input.value = (query.get('q') || '').slice(0, input.maxLength)
-  find()
+  function find() {
+    const terms = fold(input.value.trim()).split(/\s+/).filter(Boolean)
+    let matches = 0
+    for (const { element, index } of records) {
+      element.hidden = Boolean(category && element.dataset.category !== category)
+        || Boolean(audience.value && !element.dataset.audience.split(' ').includes(audience.value))
+        || !terms.every(term => index.includes(term))
+      if (!element.hidden) matches += 1
+    }
+    for (const button of filters) {
+      const active = button.dataset.filterCategory === category
+      button.setAttribute('aria-pressed', String(active))
+      if (active && button.closest('details')) button.closest('details').open = true
+    }
+    return matches
+  }
+
+  async function loadCommunity(params, localCount, signal) {
+    const endpoint = new URL('index.json', community)
+    endpoint.search = params
+    try {
+      const response = await fetch(endpoint, { signal, credentials: 'omit' })
+      if (!response.ok) return
+      const { results: posts, hasMore } = await response.json()
+      if (signal.aborted) return
+      const items = posts.map(post => {
+        const item = document.createElement('li')
+        const link = document.createElement('a')
+        link.className = 'offer'
+        link.href = new URL('p/' + encodeURIComponent(post.id) + '/', community)
+        const meta = document.createElement('span')
+        meta.className = 'offer-type'
+        meta.textContent = post.category + ' · ' + post.audience
+        const title = document.createElement('strong')
+        title.textContent = post.title
+        link.append(meta, title)
+        item.append(link)
+        return item
+      })
+      communityList.replaceChildren(...items)
+      communitySection.hidden = items.length === 0
+      communityMore.href = community.href + '?' + params.toString()
+      communityMore.hidden = !hasMore
+      showCount(localCount + items.length, hasMore)
+    } catch {
+      if (!signal.aborted) communitySection.hidden = true
+    }
+  }
+
+  function update(delay = 0, scroll = false) {
+    clearTimeout(timer)
+    pending?.abort()
+    const controller = new AbortController()
+    pending = controller
+    communitySection.hidden = true
+    const count = find()
+    showCount(count)
+    const params = new URLSearchParams()
+    if (input.value.trim()) params.set('q', input.value.trim())
+    if (category) params.set('categorie', category)
+    if (audience.value) params.set('public', audience.value)
+    const address = new URL(location.href)
+    address.search = params
+    if (scroll) address.hash = 'catalog'
+    timer = setTimeout(() => {
+      if (address.href !== location.href) history.replaceState(null, '', address)
+      loadCommunity(params, count, controller.signal)
+    }, delay)
+  }
+
+  for (const button of filters) button.addEventListener('click', () => {
+    category = button.dataset.filterCategory
+    update()
+  })
+  input.addEventListener('input', () => update(200))
+  audience.addEventListener('change', () => update())
   searchForm.addEventListener('submit', event => {
     event.preventDefault()
-    const address = new URL(location.href)
-    if (input.value.trim()) address.searchParams.set('q', input.value.trim())
-    else address.searchParams.delete('q')
-    address.hash = 'catalog'
-    history.replaceState(null, '', address)
-    find()
+    update(0, true)
     document.getElementById('catalog-title').focus()
   })
+  update()
 }
 
 function downloadCalendar(dates, id, source) {
@@ -89,6 +166,12 @@ if (kit) {
     kit.href = origin + 'fisa.txt'
     back.href = example ? origin + '#exemplu' : origin
     back.textContent = example ? '← Activitate' : '← Fișa ediției'
+    const research = document.querySelector('[data-research-link]')
+    if (research) {
+      const address = new URL(research.href)
+      address.searchParams.set('fisa', example ? 'ecuatii' : id)
+      research.href = address
+    }
   }
 }
 

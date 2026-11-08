@@ -1,17 +1,17 @@
 # Puntea Edu MD
 
-Catalog pilot DigiEduHack pentru Republica Moldova. O căutare deschide fișa unei oportunități, cu sursă, calendar și sprijin. Etichetele M1–M6 arată contribuțiile echipelor.
+Căutare pentru formarea continuă și oportunitățile din Republica Moldova. O fișă păstrează sursa, calendarul, practica și contribuțiile din cele șase module.
 
-## Rulare locală
+- [Aplicația cu conturi, recomandări și moderare](https://puntea-edu-md-v1.reedycivet4.chatgpt.site/)
+- [Catalogul pe GitHub Pages](https://gout648.github.io/puntea-edu-md/)
+- [Documentația completă](docs/PLATFORMA.md)
 
-1. Rulează `node build.mjs`.
-2. Rulează `python -m http.server 8766 --directory dist`.
-3. Deschide `http://127.0.0.1:8766/`.
+Rulează cu Node.js 24.
 
-Fișele sunt în `catalog.mjs`, sursele în `research.mjs` și interfața în `build.mjs` și `src/`. Nu sunt necesare pachete externe.
+~~~sh
+node build-worker.mjs
+node scripts/verify.mjs
+node scripts/preview.mjs
+~~~
 
-Pentru GitHub Pages, rulează `node build.mjs https://gout648.github.io/puntea-edu-md/` și publică fișierele din `dist` în rădăcina ramurii `gh-pages`, cu fișierul `.nojekyll`.
-
-## Pilot
-
-Editorul validează sursa, data și condițiile fiecărei ediții. Fișa de practică se descarcă pe dispozitiv. Legătura M6 preia adresa ediției în demo-ul separat, unde utilizatorul confirmă sursa. Deciziile din demo sunt simulate.
+Catalogul, interfața și backendul se livrează fără pachete externe. Previzualizarea locală este anonimă. Autentificarea și datele persistente folosesc Sites și D1.

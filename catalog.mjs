@@ -31,7 +31,7 @@ export const catalog = [
   },
   {
     id: 'tekwill-incluziune-financiara', title: 'Educație digitală și incluziune financiară', audience: ['Școli'],
-    kind: 'Program', status: 'deadline', deadline: '2026-11-20',
+    kind: 'Program', category: 'proiecte', status: 'deadline', deadline: '2026-11-20',
     when: 'Sesiuni în anul școlar 2026–2027.',
     provider: 'Tekwill în fiecare școală',
     source: 'https://tekwill.online/40-de-licee-din-republica-moldova-vor-beneficia-de-sesiuni-de-educatie-digitala-si-incluziune-financiara-printr-un-parteneriat-intre-tekwill-in-fiecare-scoala-cu-mastercard-si-payne/',
@@ -42,7 +42,7 @@ export const catalog = [
   },
   {
     id: 'dor-de-traditii', title: 'DOR de Tradiții', audience: ['Elevi'],
-    kind: 'Program', status: 'deadline', deadline: '2026-11-30',
+    kind: 'Program', category: 'evenimente', status: 'deadline', deadline: '2026-11-30',
     when: '27–29 decembrie 2026', event: ['2026-12-27', '2026-12-29'],
     provider: 'Biroul relații cu diaspora', source: 'https://brd.gov.md/apel-de-lansare-a-programului-dor-de-traditii-editia-a-iii-a/2026/',
     summary: 'Program de iarnă pentru adolescenți din diaspora care vor să descopere tradiții din Republica Moldova.',
@@ -155,10 +155,11 @@ export const catalog = [
   },
   {
     id: 'scoala-de-toamna-etwinning', title: 'Școala de Toamnă eTwinning 2026', audience: ['Profesori'],
-    kind: 'Formare', status: 'conflict', when: '28 noiembrie 2026',
+    kind: 'Formare', category: 'evenimente', status: 'conflict', when: '28 noiembrie 2026 · UTM, Chișinău', event: ['2026-11-28'],
     provider: 'eTwinning Moldova · UTM', source: 'https://e-twinning.utm.md/2026/10/30/apel-de-inscriere-la-scoala-de-toamna-etwinning-editia-2026/',
     summary: 'Apelul afișează evenimentul în 2026 și un termen de înscriere în 2025.',
     eligible: 'Cadre didactice. Detaliile se verifică la organizator.',
+    cost: 'Participare gratuită, conform apelului.',
     next: 'Confirmă termenul direct la organizator înainte de a pregăti candidatura.',
     keywords: 'termen contradictie conflict toamna etwinning curs',
   },
