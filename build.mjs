@@ -89,7 +89,7 @@ const home = `<div class="wrap home">
         <label class="audience-filter"><span>Public</span><select name="public"><option value="">Toți</option>${Object.entries(audiences).filter(([key]) => key !== 'toti').map(([key, label]) => `<option value="${key}">${esc(label)}</option>`).join('')}</select></label>
       </div>
     </form>
-    <div class="handoff quick-links"><a href="https://curriculum.lappsus.com/">Busola Curriculară ↗</a><a href="./o/mentorat-inel/">Mentorat INEL</a><a href="${community}recomandari/">Recomandări pentru mine</a><a href="./documentatie/#module">Parcursul comun ${arrow}</a></div>
+    <div class="handoff quick-links"><a href="./o/busola-curriculara/">Busola Curriculară</a><a href="./o/mentorat-inel/">Mentorat INEL</a><a href="${community}recomandari/">Recomandări pentru mine</a><a href="./documentatie/#module">Parcursul comun ${arrow}</a></div>
   </section>
   <section class="catalog" aria-labelledby="catalog-title">
     <div class="section-head"><h2 id="catalog-title" tabindex="-1">Catalog</h2><p role="status" data-results>${catalog.length + 1} fișe</p></div>
@@ -112,6 +112,7 @@ function detail(item) {
   if (item.event) dates.push({ start: item.event[0], end: item.event.at(-1), title: item.title })
   const deadline = item.deadline ? formatDate(item.deadline) : item.status === 'conflict' ? 'Confirmă la organizator' : 'Consultă apelul organizatorului'
   const offersSupport = item.audience.includes('Profesori')
+  const sourceLabel = item.kind === 'Telegram' ? 'Deschide în Telegram' : item.status === 'resource' ? 'Deschide resursa' : 'Deschide la organizator'
   return `<article class="wrap subpage">
     ${link('../../#catalog', '← Catalog', 'back')}
     <p class="eyebrow">${esc(item.kind)} · ${esc(item.provider)}</p>
@@ -126,14 +127,15 @@ function detail(item) {
       </dl>
       <div class="next">
         <p>${esc(item.next)}</p>
-        ${external(item.source, 'Deschide la organizator', 'button')}
+        ${external(item.source, sourceLabel, 'button')}
         ${dates.length ? `<button class="text-button" type="button" data-calendar="${esc(JSON.stringify(dates))}" data-id="${item.id}" data-source="${esc(item.source)}" hidden>Salvează în calendar</button>` : ''}
       </div>
     </section>
     <div class="handoff">
       ${offersSupport ? `<a href="../../practica/?fisa=${item.id}#fisa">Sprijin și practică ${arrow}</a>` : ''}
-      ${link(community + '?fisa=' + item.id, 'Comunitatea acestei ediții')}
-      <span>Verificat la ${esc(formatDate(verified))}</span>
+      ${link(community + '?fisa=' + item.id, item.status === 'resource' ? 'Materiale și discuții' : 'Comunitatea acestei ediții')}
+      ${item.reference ? external(item.reference[1], item.reference[0]) : ''}
+      <span>Verificat la ${esc(formatDate(item.verified || verified))}</span>
     </div>
   </article>`
 }
@@ -229,7 +231,7 @@ save('solutie/fisa.txt', worksheet(example.title, ['Ediție: ' + example.id, exa
 save('documentatie/index.html', layout('De la căutare la clasă', 'Caută, planifică, lucrează cu alți profesori și împărtășește ce a funcționat la clasă.', 'documentatie/', docs))
 for (const item of catalog) {
   save(pathFor(item) + 'index.html', layout(item.title, item.summary, pathFor(item), detail(item)))
-  save(pathFor(item) + 'fisa.txt', worksheet(item.title, ['Ediție: ' + item.id, item.provider, 'Sursă: ' + item.source, 'Verificat: ' + verified]))
+  save(pathFor(item) + 'fisa.txt', worksheet(item.title, ['Ediție: ' + item.id, item.provider, 'Sursă: ' + item.source, 'Verificat: ' + (item.verified || verified)]))
 }
 mkdirSync(new URL('assets/', dist), { recursive: true })
 for (const name of ['style.css', 'app.js', 'mark.svg', 'bridge.svg']) {

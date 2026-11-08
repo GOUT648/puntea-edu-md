@@ -25,7 +25,7 @@ export const categories = {
   resurse: 'Resurse',
   activitati: 'Activități',
 }
-export const mainCategories = ['formari', 'concursuri', 'comunitati', 'evenimente', 'finantari', 'proiecte']
+export const mainCategories = ['formari', 'concursuri', 'comunitati', 'evenimente', 'finantari', 'proiecte', 'resurse']
 
 export const kindToCategory = {
   Concurs: 'concursuri',

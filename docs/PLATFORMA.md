@@ -123,6 +123,7 @@ Limitele de trimitere sunt cinci propuneri active, douăsprezece propuneri noi �
 | Componentă | Responsabilitate |
 |---|---|
 | `catalog.mjs` | Date editoriale, surse, termene, public și categorii pentru catalogul de pornire |
+| `resources.mjs` | Resurse pentru predare și studiu, oportunități și comunități externe verificate |
 | `build.mjs` | Pagini HTML statice și fișe offline, atât pentru GitHub Pages cât și pentru serviciul cu conturi |
 | `src/app.js` | Căutare instant, filtre, combinarea rezultatelor și păstrarea ediției la întoarcerea din practică |
 | `src/taxonomy.mjs` | Chei și denumiri comune pentru categorii, public, tipuri de material și profiluri |

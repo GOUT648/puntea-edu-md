@@ -4,6 +4,7 @@ import { runInNewContext } from 'node:vm'
 import { localDatabase } from './local-d1.mjs'
 import worker from '../dist/server/index.js'
 import { rankOpportunities } from '../src/recommendations.mjs'
+import { resources } from '../resources.mjs'
 
 const origin = 'https://puntea.example'
 const code = randomUUID() + randomUUID()
@@ -25,7 +26,18 @@ function visit(path, user, fields, requestOrigin = origin) {
 }
 
 const homepage = await (await visit('/')).text()
-for (const name of ['Cursuri', 'Concursuri', 'Comunități', 'Evenimente', 'Granturi', 'Proiecte']) assert.match(homepage, new RegExp(name))
+for (const name of ['Cursuri', 'Concursuri', 'Comunități', 'Evenimente', 'Granturi', 'Proiecte', 'Resurse']) assert.match(homepage, new RegExp(name))
+assert.equal(new Set(resources.map(item => item.id)).size, resources.length)
+for (const item of resources) {
+  assert.equal(new URL(item.source).protocol, 'https:')
+  const record = await visit('/o/' + item.id + '/')
+  assert.equal(record.status, 200)
+  assert.ok(homepage.includes('href="./o/' + item.id + '/"'))
+  assert.match(await record.text(), /Verificat la/)
+  if (item.kind === 'Telegram') assert.equal(item.category, 'comunitati')
+}
+assert.match(await (await visit('/o/telegram-sigmoid/')).text(), /https:\/\/t\.me\/sigmo_ai/)
+assert.match(await (await visit('/comunitate/')).text(), /telegram-matematica-md/)
 assert.match(homepage, /rel="manifest"/)
 const manifest = await (await visit('/manifest.webmanifest')).json()
 assert.equal(manifest.display, 'standalone')

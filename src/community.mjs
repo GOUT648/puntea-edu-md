@@ -51,6 +51,11 @@ export function feed(posts, filters, identity, hasMore) {
   const contextQuery = filters.fisa ? '?fisa=' + encodeURIComponent(filters.fisa) : ''
   return page('Comunitate', `<div class="section-head"><h1>Comunitate</h1>${identity ? button(root + 'scrie/' + contextQuery, 'Propune') : `<a class="button" target="_top" href="${sign('scrie/' + contextQuery)}">Intră în cont</a>`}</div>
   <p class="intro">Anunțuri, cercetări și cereri de sprijin verificate înainte de publicare.</p>
+  <div class="handoff" aria-label="Comunități externe">
+    <a href="/o/telegram-sigmoid/">Sigmoid AI</a>
+    <a href="/o/telegram-matematica-md/">Matematica.md</a>
+    <a href="/?categorie=comunitati&amp;q=telegram#catalog">Toate grupurile și canalele Telegram →</a>
+  </div>
   <nav class="chips" aria-label="Categorii">${chips}</nav>
   <form class="community-filter" action="${root}" role="search">
     <input type="hidden" name="categorie" value="${e(filters.categorie)}">

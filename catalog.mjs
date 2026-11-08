@@ -1,3 +1,5 @@
+import { resources } from './resources.mjs'
+
 export const verified = '2026-11-07'
 
 export const urls = {
@@ -163,4 +165,5 @@ export const catalog = [
     next: 'Confirmă termenul direct la organizator înainte de a pregăti candidatura.',
     keywords: 'termen contradictie conflict toamna etwinning curs',
   },
+  ...resources,
 ]
