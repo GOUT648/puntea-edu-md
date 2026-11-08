@@ -34,6 +34,7 @@ const reviewLink = (path, title) => governance + '?' + new URLSearchParams({ mod
 function layout(title, description, path, body) {
   const base = '../'.repeat(path.split('/').filter(Boolean).length) || './'
   const url = site && site + '/' + path
+  const script = base + 'assets/app.js' + (path === 'practica/' ? '?v=2' : '')
   return `<!doctype html>
 <html lang="ro-MD">
 <head>
@@ -43,7 +44,7 @@ function layout(title, description, path, body) {
   ${url ? `<link rel="canonical" href="${esc(url)}"><meta property="og:url" content="${esc(url)}">` : ''}
   <meta property="og:title" content="${esc(title)} · Puntea Edu MD"><meta property="og:description" content="${esc(description)}">
   <link rel="icon" href="${base}assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="${base}assets/style.css"><script src="${base}assets/app.js" defer></script>
+  <link rel="stylesheet" href="${base}assets/style.css"><script src="${script}" defer></script>
 </head>
 <body>
   <a class="skip" href="#continut">Sari la conținut</a>
@@ -131,7 +132,7 @@ function detail(item) {
 
 const practiceIndex = Object.fromEntries(catalog.map(item => [item.id, item.title]))
 const practice = `<div class="wrap subpage">
-  <a class="back" href="../#catalog" data-practice-return>← Catalog</a>
+  ${link('../#catalog', '← Catalog', 'back')}
   <p class="eyebrow">${tag(2)} ${tag(3)} ${tag(5)}</p>
   <h1>Încearcă. Notează. Repetă.</h1>
   <div class="sheet practice-sheet" id="fisa">
@@ -198,6 +199,7 @@ const flows = [
   [1, 5, 'Ediție și reper'],
   [5, 1, 'Exemplu verificat'],
   [5, 2, 'Exemple pentru mentori'],
+  [5, 6, 'Dovezi pentru decizie'],
   [6, 1, 'Decizii'],
 ]
 const docs = `<div class="wrap subpage">
