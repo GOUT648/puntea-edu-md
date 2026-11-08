@@ -84,7 +84,7 @@ if (kit) {
   const title = example ? 'Ecuații de gradul I' : Object.hasOwn(index, id) ? index[id] : ''
   if (title) {
     const origin = example ? '../solutie/' : '../o/' + id + '/'
-    const back = document.querySelector('[data-practice-return]')
+    const back = document.querySelector('.back')
     document.querySelector('[data-practice-title]').textContent = title
     kit.href = origin + 'fisa.txt'
     back.href = example ? origin + '#exemplu' : origin
