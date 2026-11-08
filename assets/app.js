@@ -187,3 +187,19 @@ if (archive) {
   reveal()
   window.addEventListener('hashchange', reveal)
 }
+const appManifest = document.querySelector('link[rel="manifest"]')
+if (appManifest && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.register(new URL('sw.js', appManifest.href)).catch(() => {})
+  const install = document.querySelector('[data-install]')
+  if (install) {
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault()
+      install.hidden = false
+      install.onclick = async () => {
+        install.hidden = true
+        await event.prompt()
+      }
+    })
+    window.addEventListener('appinstalled', () => { install.hidden = true })
+  }
+}
