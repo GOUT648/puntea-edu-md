@@ -198,6 +198,12 @@ Pentru un pilot realist, urmărește patru măsuri. Timpul median de la căutare
 
 Pentru o platformă principală la nivel de stat, pilotul ar trebui urmat de validarea cu instituții, reguli de delegare a moderatorilor, proceduri de contestare și corectare, testare de accesibilitate, integrare cu registrele și canalele oficiale și politici de păstrare a datelor aprobate. Importul automat din registre, verificarea afilierii instituționale și transmiterea automată a deciziilor între instanțele DigiEduHack sunt etape distincte de implementare. Baza D1 a comunității și documentele de context DigiEduHack au scopuri separate.
 
+## Site și aplicație instalabilă
+
+Puntea Edu are o singură adresă pentru catalog, cont și comunitate. Parcursul public grupează activitatea în trei pași. Găsești și planifici, încerci cu sprijin, apoi împărtășești ce a funcționat. Contribuțiile celor șase module și cele [19 subidei ale catalogului](../solution.mjs) rămân în documentația de proiect.
+
+Versiunea găzduită include un manifest și poate fi instalată din browser. Aplicația se deschide în catalog și folosește același cont. Elev, Profesor, Școală și Companie sunt opțiuni private. Service workerul descarcă doar catalogul editorial, parcursul, fișele publice și resursele lor de bază. Contul, materialele dinamice ale comunității, preferințele, moderarea și toate trimiterile rămân în rețea. GitHub Pages deschide aplicația și comunitatea la adresa principală.
+
 ## Referințe
 
 - Materiale pentru cele 6 module, document de lucru DigiEduHack din spațiul partajat.

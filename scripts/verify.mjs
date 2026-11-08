@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { createHash, randomUUID } from 'node:crypto'
+import { runInNewContext } from 'node:vm'
 import { localDatabase } from './local-d1.mjs'
 import worker from '../dist/server/index.js'
 import { rankOpportunities } from '../src/recommendations.mjs'
@@ -25,6 +26,39 @@ function visit(path, user, fields, requestOrigin = origin) {
 
 const homepage = await (await visit('/')).text()
 for (const name of ['Cursuri', 'Concursuri', 'Comunități', 'Evenimente', 'Granturi', 'Proiecte']) assert.match(homepage, new RegExp(name))
+assert.match(homepage, /rel="manifest"/)
+const manifest = await (await visit('/manifest.webmanifest')).json()
+assert.equal(manifest.display, 'standalone')
+for (const icon of manifest.icons) {
+  const response = await visit('/' + icon.src)
+  const bytes = Buffer.from(await response.arrayBuffer())
+  assert.equal(response.headers.get('Content-Type'), 'image/png')
+  assert.equal(bytes.readUInt32BE(16) + 'x' + bytes.readUInt32BE(20), icon.sizes)
+}
+const handlers = {}
+let cached = []
+runInNewContext(await (await visit('/sw.js')).text(), {
+  self: { registration: { scope: origin + '/' }, addEventListener: (name, handler) => { handlers[name] = handler } },
+  URL,
+  fetch: () => Promise.reject(new Error('offline')),
+  caches: { open: async () => ({ addAll: urls => { cached = urls }, match: url => url }) },
+})
+let installed
+handlers.install({ waitUntil: value => { installed = value } })
+await installed
+assert.ok(cached.includes(origin + '/o/matematica-2027/'))
+assert.ok(cached.every(url => !new URL(url).pathname.startsWith('/comunitate/')))
+function offline(path, method = 'GET') {
+  let response
+  handlers.fetch({ request: { url: origin + path, method, mode: 'navigate' }, respondWith: value => { response = value } })
+  return response
+}
+assert.equal(await offline('/?categorie=formari'), origin + '/')
+assert.equal(offline('/comunitate/cont/'), undefined)
+assert.equal(offline('/', 'POST'), undefined)
+const journey = await (await visit('/documentatie/')).text()
+assert.match(journey, /Găsești și planifici/)
+assert.doesNotMatch(journey, /class="module-card"|class="tag tag-/)
 assert.equal((await visit('/practica/')).status, 200)
 assert.equal((await visit('/o/matematica-2027/')).status, 200)
 assert.match(await (await visit('/comunitate/cont/')).text(), /signin-with-chatgpt/)

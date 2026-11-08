@@ -6,7 +6,8 @@ import { rankOpportunities } from './recommendations.mjs'
 const root = '/comunitate/'
 const uuid = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/
 const postPath = /^\/comunitate\/p\/([0-9a-f-]{36})\/(?:(calendar\.ics|practica\.txt)|(retrage|semnaleaza)\/)?$/
-const typeFor = { html: 'text/html', css: 'text/css', js: 'text/javascript', svg: 'image/svg+xml', txt: 'text/plain', xml: 'application/xml' }
+const typeFor = { html: 'text/html', css: 'text/css', js: 'text/javascript', svg: 'image/svg+xml', txt: 'text/plain',
+  xml: 'application/xml', webmanifest: 'application/manifest+json', png: 'image/png' }
 const publicFields = 'id, kind, category, audience, title, summary, source_url, context_id, organizer, deadline, event_date, method, limits, status'
 const redirect = location => new Response(null, { status: 303, headers: { Location: location, 'Cache-Control': 'no-store' } })
 const statement = (db, sql, ...values) => db.prepare(sql).bind(...values)
@@ -327,9 +328,12 @@ function staticFile(request, url) {
   let key = url.pathname.endsWith('/') ? url.pathname + 'index.html' : url.pathname
   if (!Object.hasOwn(assets, key) && Object.hasOwn(assets, key + '/index.html')) return redirect(key + '/' + url.search)
   if (!Object.hasOwn(assets, key)) return problem('Pagina nu există.', 404)
-  const type = typeFor[key.split('.').at(-1)]
-  return new Response(request.method === 'HEAD' ? null : assets[key], {
-    headers: { 'Content-Type': type + '; charset=utf-8', 'Cache-Control': 'public, max-age=120', 'X-Content-Type-Options': 'nosniff' },
+  const extension = key.split('.').at(-1)
+  const binary = extension === 'png'
+  const body = request.method === 'HEAD' ? null : binary ? Uint8Array.from(atob(assets[key]), c => c.charCodeAt(0)) : assets[key]
+  return new Response(body, {
+    headers: { 'Content-Type': typeFor[extension] + (binary ? '' : '; charset=utf-8'),
+      'Cache-Control': key === '/sw.js' ? 'no-cache' : 'public, max-age=120', 'X-Content-Type-Options': 'nosniff' },
   })
 }
 

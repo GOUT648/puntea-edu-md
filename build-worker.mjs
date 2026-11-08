@@ -13,11 +13,11 @@ const dist = join(project, 'dist')
 const output = join(dist, 'server')
 const assets = Object.create(null)
 for (const item of readdirSync(dist, { recursive: true, withFileTypes: true })) {
-  if (!item.isFile() || !/\.(html|css|js|svg|txt|xml)$/.test(item.name)) continue
+  if (!item.isFile() || !/\.(html|css|js|svg|txt|xml|webmanifest|png)$/.test(item.name)) continue
   const file = join(item.parentPath, item.name)
   const path = relative(dist, file).replaceAll('\\', '/')
   if (path.startsWith('server/') || path.startsWith('.openai/')) continue
-  assets['/' + path] = readFileSync(file, 'utf8')
+  assets['/' + path] = readFileSync(file, path.endsWith('.png') ? 'base64' : 'utf8')
 }
 const editions = Object.fromEntries(catalog.map(({ id, title }) => [
   id, { title, href: '/o/' + id + '/', practice: '/practica/?fisa=' + id + '#fisa' },

@@ -1,23 +1,21 @@
-import { copyFileSync, mkdirSync, writeFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { catalog, urls, verified } from './catalog.mjs'
-import { modules, evidence } from './research.mjs'
-import { solutionGroups } from './solution.mjs'
+import { evidence } from './research.mjs'
 import { audienceKeys, audiences, categories, kindToCategory, mainCategories } from './src/taxonomy.mjs'
 
 const site = process.argv[2] ? new URL(process.argv[2]).href.replace(/\/$/, '') : ''
 const dist = new URL('./dist/', import.meta.url)
-const graph = 'https://script.google.com/macros/s/AKfycbx0JXaodr1tqOqX4nLWfPtST3xxy2g34TP_LsprQIeDWHtAgCoTfA3nyafps8tWjv1OSQ/exec?p=harta'
-const governance = 'https://m6-vocea-practicienilor-v2.pointywhale2.chatgpt.site/'
 const referenceSite = 'https://puntea-edu-md-v1.reedycivet4.chatgpt.site/'
 const repository = 'https://github.com/GOUT648/puntea-edu-md'
-const community = site.includes('github.io/') ? referenceSite + 'comunitate/' : '/comunitate/'
+const mirror = site.includes('github.io/')
+const community = mirror ? referenceSite + 'comunitate/' : '/comunitate/'
 const guide = repository + '/blob/main/docs/PLATFORMA.md'
 const calendarDate = new Intl.DateTimeFormat('ro-MD', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
 const formatDate = value => calendarDate.format(new Date(value + 'T12:00:00Z'))
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
 const pathFor = item => 'o/' + item.id + '/'
 const paths = ['', 'practica/', 'solutie/', 'documentatie/', ...catalog.map(pathFor)]
-const names = ['Catalog', 'Mentor', 'Practică', 'Calendar', 'Dovadă', 'Guvernanță']
 const example = {
   id: 'ecuatii',
   title: 'Ecuații de gradul I',
@@ -31,13 +29,11 @@ const arrow = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-
 const search = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4 4"/></svg>'
 const link = (href, label, style = '') => `<a class="${style}" href="${esc(href)}">${esc(label)}</a>`
 const external = (href, label, style = '') => `<a class="${style}" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(label)} <span aria-hidden="true">↗</span></a>`
-const tag = number => `<span class="tag tag-${number}" title="${esc(modules[number - 1][1])}">M${number}</span>`
-const reviewLink = (path, title) => governance + '?' + new URLSearchParams({ module: '1', source: referenceSite + path, title })
 
 function layout(title, description, path, body) {
   const base = '../'.repeat(path.split('/').filter(Boolean).length) || './'
   const url = site && site + '/' + path
-  const script = base + 'assets/app.js?v=3'
+  const script = base + 'assets/app.js?v=4'
   return `<!doctype html>
 <html lang="ro-MD">
 <head>
@@ -47,16 +43,17 @@ function layout(title, description, path, body) {
   ${url ? `<link rel="canonical" href="${esc(url)}"><meta property="og:url" content="${esc(url)}">` : ''}
   <meta property="og:title" content="${esc(title)} · Puntea Edu MD"><meta property="og:description" content="${esc(description)}">
   <link rel="icon" href="${base}assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="${base}assets/style.css?v=3"><script src="${script}" defer></script>
+  ${mirror ? '' : `<link rel="manifest" href="${base}manifest.webmanifest"><link rel="apple-touch-icon" href="${base}assets/app-192.png">`}
+  <link rel="stylesheet" href="${base}assets/style.css?v=4"><script src="${script}" defer></script>
 </head>
 <body>
   <a class="skip" href="#continut">Sari la conținut</a>
   <header class="site-header wrap">
     <a class="brand" href="${base}"><img src="${base}assets/mark.svg" width="36" height="36" alt=""><span>Puntea Edu <small>MD</small></span></a>
-    <nav aria-label="Navigare principală">${link(base + '#catalog', 'Caută')}${link(base + 'documentatie/#module', 'Parcurs')}${link(community, 'Comunitate')}${link(community + 'cont/', 'Cont')}</nav>
+    <nav aria-label="Navigare principală">${link(base + '#catalog', 'Caută')}${link(community, 'Comunitate')}${link(community + 'cont/', 'Cont')}</nav>
   </header>
   <main id="continut">${body}</main>
-  <footer class="site-footer wrap"><span>Puntea Edu MD <span aria-hidden="true">·</span> Pilot DigiEduHack</span><span>${link(base + 'documentatie/#surse', 'Surse')} · ${external(repository, 'GitHub')}</span></footer>
+  <footer class="site-footer wrap"><span>Puntea Edu MD <span aria-hidden="true">·</span> Pilot DigiEduHack</span><span>${link((mirror ? referenceSite : base) + 'documentatie/#instalare', 'Instalează aplicația')} · ${link(base + 'documentatie/#surse', 'Surse')}</span></footer>
 </body>
 </html>`
 }
@@ -105,8 +102,8 @@ const home = `<div class="wrap home">
     <p data-empty hidden>Nu am găsit rezultate în catalog cu aceste filtre.</p>
     <section data-community-results hidden aria-labelledby="community-results-title"><h3 id="community-results-title">Din Comunitate</h3><ul class="offers" data-community-list></ul><a data-community-more href="${community}">Mai multe rezultate</a></section>
   </section>
-  <section class="brief"><h2>Șase module. O fișă.</h2><p>Găsești o oportunitate, ceri sprijin, încerci la clasă și documentezi ce a funcționat.</p>
-  <nav class="module-rail" aria-label="Contribuțiile modulelor">${names.map((name, index) => `<a href="./documentatie/#m${index + 1}">${tag(index + 1)}${esc(name)}</a>`).join('')}</nav></section>
+  <section class="brief"><h2>De la căutare la clasă</h2><p>Găsești o oportunitate, o încerci cu sprijin și împărtășești ce a funcționat.</p>
+  <div class="handoff">${link('./documentatie/#module', 'Vezi parcursul →')}${link(community, 'Intră în comunitate →')}</div></section>
 </div>`
 
 function detail(item) {
@@ -117,14 +114,14 @@ function detail(item) {
   const offersSupport = item.audience.includes('Profesori')
   return `<article class="wrap subpage">
     ${link('../../#catalog', '← Catalog', 'back')}
-    <p class="eyebrow">${tag(1)} ${esc(item.kind)} · ${esc(item.provider)}</p>
+    <p class="eyebrow">${esc(item.kind)} · ${esc(item.provider)}</p>
     <h1>${esc(item.title)}</h1>
     <p class="intro">${esc(item.summary)}</p>
     <section class="sheet" aria-label="Fișa oportunității">
       <dl class="facts">
-        <div><dt>${tag(1)} Pentru cine</dt><dd>${esc(item.eligible)}</dd></div>
-        ${item.status !== 'resource' ? `<div><dt>${tag(4)} ${esc(item.deadlineLabel || 'Înscriere')}</dt><dd>${item.deadline ? `${esc(deadline)} <span class="status" data-status="deadline" data-deadline="${item.deadline}"></span>` : external(item.source, deadline)}</dd></div>` : ''}
-        ${item.when ? `<div><dt>${tag(4)} Desfășurare</dt><dd>${esc(item.when)}</dd></div>` : ''}
+        <div><dt>Pentru cine</dt><dd>${esc(item.eligible)}</dd></div>
+        ${item.status !== 'resource' ? `<div><dt>${esc(item.deadlineLabel || 'Înscriere')}</dt><dd>${item.deadline ? `${esc(deadline)} <span class="status" data-status="deadline" data-deadline="${item.deadline}"></span>` : external(item.source, deadline)}</dd></div>` : ''}
+        ${item.when ? `<div><dt>Desfășurare</dt><dd>${esc(item.when)}</dd></div>` : ''}
         ${item.cost ? `<div><dt>Cost</dt><dd>${esc(item.cost)}</dd></div>` : ''}
       </dl>
       <div class="next">
@@ -134,10 +131,9 @@ function detail(item) {
       </div>
     </section>
     <div class="handoff">
-      ${offersSupport ? `<a href="../../practica/?fisa=${item.id}#fisa">${tag(2)}${tag(3)}${tag(5)} Sprijin și practică ${arrow}</a>` : ''}
-      <span>${tag(5)} Verificat la ${esc(formatDate(verified))}</span>
-      ${link(community + '?fisa=' + item.id, 'M2–M5 · Materiale și sprijin pe aceeași ediție')}
-      <a id="corectura" href="${esc(reviewLink(pathFor(item), item.title))}" target="_blank" rel="noopener noreferrer">${tag(6)} Deschide fișa în demo M6 <span aria-hidden="true">↗</span></a>
+      ${offersSupport ? `<a href="../../practica/?fisa=${item.id}#fisa">Sprijin și practică ${arrow}</a>` : ''}
+      ${link(community + '?fisa=' + item.id, 'Comunitatea acestei ediții')}
+      <span>Verificat la ${esc(formatDate(verified))}</span>
     </div>
   </article>`
 }
@@ -145,7 +141,6 @@ function detail(item) {
 const practiceIndex = Object.fromEntries(catalog.map(item => [item.id, item.title]))
 const practice = `<div class="wrap subpage">
   ${link('../#catalog', '← Catalog', 'back')}
-  <p class="eyebrow">${tag(2)} ${tag(3)} ${tag(5)}</p>
   <h1>Încearcă. Notează. Repetă.</h1>
   <div class="sheet practice-sheet" id="fisa">
     <div>
@@ -156,25 +151,16 @@ const practice = `<div class="wrap subpage">
     <a class="button" href="./fisa.txt" download="fisa-de-practica.txt" data-kit>Descarcă fișa ↓</a>
   </div>
   <div class="handoff">
-    <span>${tag(2)} ${external(urls.inel, 'Mentorat INEL')}</span>
-    <span>${tag(3)} ${external(urls.etwinning, 'Parteneri eTwinning')}</span>
-    <span>${tag(5)} Fișă locală, fără date de elev</span>
-    <a data-research-link href="${community}scrie/?tip=cercetare">${tag(5)} Propune o observație</a>
+    ${external(urls.inel, 'Mentorat INEL')}
+    ${external(urls.etwinning, 'Parteneri eTwinning')}
+    <a data-research-link href="${community}scrie/?tip=cercetare">Propune o observație</a>
   </div>
   <script type="application/json" id="practice-index">${JSON.stringify(practiceIndex).replaceAll('<', '\\u003c')}</script>
 </div>`
 
-const states = { live: 'Disponibil', partial: 'Parțial', planned: 'Propus', pilot: 'Pilot' }
-const archive = `<details class="archive" id="idei-m1"><summary>Cele 19 subidei din M1</summary>
-  ${solutionGroups.map(group => `<section id="${group.id}"><h3>${esc(group.title)}</h3>
-  <ul>${group.ideas.map(([id, title, state, , href]) =>
-    `<li id="m1-${String(id).padStart(2, '0')}">${href ? link(href, id === 4 ? 'Fișa vie' : title) : esc(title)} <small>${states[state]}</small></li>`
-  ).join('')}</ul></section>`).join('')}
-</details>`
-
 const solution = `<article class="wrap subpage" id="exemplu">
   ${link('../#catalog', '← Catalog', 'back')}
-  <p class="eyebrow">${tag(1)} ${tag(3)} ${tag(5)} EXEMPLU PILOT</p>
+  <p class="eyebrow">EXEMPLU PILOT</p>
   <h1>${esc(example.title)}</h1>
   <p class="intro">${esc(example.curriculum)}</p>
   <div class="sheet example-sheet">
@@ -186,62 +172,31 @@ const solution = `<article class="wrap subpage" id="exemplu">
     <a class="button" href="../practica/?exemplu=ecuatii#fisa">Deschide fișa ${arrow}</a>
   </div>
   <div class="handoff">
-    <span>${tag(5)} ${external(example.busola, 'Busola Curriculară')} · ${external(example.source, 'MEC, p. 34')}</span>
-    <a href="../o/mentorat-inel/">${tag(2)} Mentor INEL ${arrow}</a>
-    <span>${tag(6)} ${external(reviewLink('solutie/#exemplu', example.title), 'Deschide activitatea în demo M6')}</span>
+    ${external(example.busola, 'Busola Curriculară')}
+    ${external(example.source, 'MEC, p. 34')}
+    <a href="../o/mentorat-inel/">Mentorat INEL ${arrow}</a>
+    ${link(community + '?fisa=ecuatii', 'Comunitatea activității')}
   </div>
-  ${archive}
 </article>`
 
-const contributions = [
-  ['Fișa verificată', 'Tema și codul ediției merg către mentor și cerc.', '../#catalog'],
-  ['Mentor potrivit', 'Întrebarea din fișă ajunge la mentor; acesta poate sprijini cercul.', '../o/mentorat-inel/'],
-  ['Practică în perechi', 'Cercul pornește de la ediție și trimite M5 observații anonimizate, cu acord.', '../practica/'],
-  ['Calendar și traseu', 'Termenul, sesiunile și sursa au același cod de ediție în M1 și M5.', '../o/matematica-2027/'],
-  ['Dovadă din clasă', 'Fișa de practică se leagă de reperul curricular și de ediție.', '../practica/?exemplu=ecuatii#fisa'],
-  ['Decizii și criterii', 'M6 poate întoarce decizia către catalog. Demo separat, cu date simulate.', governance],
-]
-const flows = [
-  [1, 2, 'Tema și mentorul', '↔'],
-  [1, 3, 'Fișa pentru cerc'],
-  [1, 4, 'Ediție și calendar', '↔'],
-  [2, 3, 'Sprijin'],
-  [3, 5, 'Practică anonimă'],
-  [3, 6, 'Blocaje agregate'],
-  [4, 5, 'Sursă și blocaje', '↔'],
-  [1, 5, 'Ediție și reper'],
-  [5, 1, 'Exemplu verificat'],
-  [5, 2, 'Exemple pentru mentori'],
-  [5, 6, 'Dovezi pentru decizie'],
-  [6, 1, 'Decizii'],
-]
 const docs = `<div class="wrap subpage">
   ${link('../#catalog', '← Catalog', 'back')}
   <section id="module">
-    <p class="eyebrow">PUNTEA EDU MD</p>
-    <h1>Șase module. O fișă.</h1>
-    <p class="intro">Codul ediției ține la un loc oferta, sprijinul și dovada.</p>
-    <ol class="journey" aria-label="Parcursul complet">
-      <li>${tag(1)} <strong>Cauți</strong> <a href="../?categorie=concursuri#catalog">Găsești fișa</a></li>
-      <li>${tag(4)} <strong>Planifici</strong> <a href="../o/matematica-2027/">Verifici data</a></li>
-      <li>${tag(2)} <strong>Ceri sprijin</strong> <a href="../o/mentorat-inel/">Găsești ruta către mentor</a></li>
-      <li>${tag(3)} <strong>Încerci la clasă</strong> <a href="../solutie/#exemplu">Pornești o activitate</a></li>
-      <li>${tag(5)} <strong>Documentezi</strong> <a href="${community}scrie/?tip=cercetare&amp;fisa=ecuatii">Trimiți observația</a></li>
-      <li>${tag(6)} <strong>Verifici și decizi</strong> <a href="${community}moderare/">Moderezi propunerile</a></li>
+    <h1>De la căutare la clasă</h1>
+    <p class="intro">O singură fișă leagă oportunitatea, calendarul, sprijinul și ce înveți din practică.</p>
+    <ol class="journey" aria-label="Parcursul Puntea Edu">
+      <li><strong>Găsești și planifici</strong><p>Alegi o oportunitate și verifici sursa, publicul și termenul.</p><a href="../?categorie=formari#catalog">Găsește o formare ${arrow}</a></li>
+      <li><strong>Încerci cu sprijin</strong><p>Pornești de la o fișă, ceri ajutor unui mentor și lucrezi cu colegii.</p><a href="../solutie/#exemplu">Vezi o activitate ${arrow}</a></li>
+      <li><strong>Împărtășești ce a funcționat</strong><p>Trimiți o observație legată de fișă. După verificare, colegii o pot găsi în catalog.</p><a href="${community}">Intră în comunitate ${arrow}</a></li>
     </ol>
-    <p>Materialul publicat revine în căutare și rămâne legat de ediția de pornire. Pentru sprijin, un profesor sau o școală poate propune o cerere pe aceeași fișă.</p>
-    <ul class="flow" aria-label="Transferuri între module">
-      ${flows.map(([from, to, label, direction = '→']) => `<li><a href="#m${from}">${tag(from)}</a><span>${direction}</span><a href="#m${to}">${tag(to)}</a><span>${esc(label)}</span></li>`).join('')}
-    </ul>
-    <div class="contributions">
-      ${contributions.map(([title, text, href], i) => `<article id="m${i + 1}" class="module-card">
-        ${tag(i + 1)}<h2>${esc(title)}</h2><p>${esc(text)}</p>
-        ${href === governance ? external(href, 'Deschide demo M6') : link(href, 'Vezi în site →')}
-      </article>`).join('')}
-    </div>
-    ${external(graph, 'Harta de lucru DigiEduHack', 'subtle')} · ${external(guide, 'Documentația completă', 'subtle')}
+    <a class="subtle" href="${guide}">Documentația proiectului ↗</a>
   </section>
-  <section id="pilot" class="brief"><h2>Pilot</h2><p>Catalog editat manual. Fișele se descarcă local. Testul cu profesori urmărește dacă găsesc oferta, sursa și pasul următor în două minute.</p></section>
+  <section id="instalare" class="brief"><h2>Puntea Edu pe telefon sau calculator</h2>
+    <p>Instalezi din browser și folosești același cont, catalog și comunitate.</p>
+    ${mirror ? link(referenceSite + 'documentatie/#instalare', 'Deschide aplicația', 'button') : '<button type="button" class="button" data-install hidden>Instalează Puntea Edu</button>'}
+    <p>Pe Android și calculator, caută <b>Instalează aplicația</b> în meniul browserului. Pe iPhone, în Safari, alege <b>Partajare → Adăugați la ecranul principal</b>.</p>
+    <p>După prima vizită, catalogul rămâne disponibil offline. Contul și comunitatea folosesc conexiunea la internet.</p>
+  </section>
   <section id="surse" class="brief"><h2>Surse</h2>
     <ul class="sources">
       ${evidence.map(([title, credit, , url]) => `<li>${external(url, title)} <small>${esc(credit)}</small></li>`).join('')}
@@ -271,7 +226,7 @@ save('practica/index.html', layout('Fișa de practică', 'Mentorat, parteneri ș
 save('practica/fisa.txt', worksheet('Puntea Edu MD · Fișă de practică'))
 save('solutie/index.html', layout(example.title, 'Activitate pilot de matematică pentru clasa a VII-a, cu reper curricular și fișă de practică.', 'solutie/', solution))
 save('solutie/fisa.txt', worksheet(example.title, ['Ediție: ' + example.id, example.curriculum, 'Sursă: ' + example.source, '', example.activity, '3x + 12 = 42. Verificare: 3 × 10 + 12 = 42.']))
-save('documentatie/index.html', layout('Cele șase module', 'Cine contribuie la fișa comună Puntea Edu MD și ce circulă între cele șase module DigiEduHack.', 'documentatie/', docs))
+save('documentatie/index.html', layout('De la căutare la clasă', 'Caută, planifică, lucrează cu alți profesori și împărtășește ce a funcționat la clasă.', 'documentatie/', docs))
 for (const item of catalog) {
   save(pathFor(item) + 'index.html', layout(item.title, item.summary, pathFor(item), detail(item)))
   save(pathFor(item) + 'fisa.txt', worksheet(item.title, ['Ediție: ' + item.id, item.provider, 'Sursă: ' + item.source, 'Verificat: ' + verified]))
@@ -279,6 +234,26 @@ for (const item of catalog) {
 mkdirSync(new URL('assets/', dist), { recursive: true })
 for (const name of ['style.css', 'app.js', 'mark.svg', 'bridge.svg']) {
   copyFileSync(new URL('./src/' + name, import.meta.url), new URL('assets/' + name, dist))
+}
+if (!mirror) {
+  const icons = [192, 512].map(size => {
+    const name = 'app-' + size + '.png'
+    copyFileSync(new URL('./src/' + name, import.meta.url), new URL('assets/' + name, dist))
+    return { src: 'assets/' + name, sizes: size + 'x' + size, type: 'image/png' }
+  })
+  save('manifest.webmanifest', JSON.stringify({
+    id: './', name: 'Puntea Edu MD', short_name: 'Puntea Edu', lang: 'ro-MD', start_url: './',
+    scope: './', display: 'standalone', theme_color: '#f5f5ec', background_color: '#f5f5ec', icons,
+  }))
+  const publicPages = [...paths, 'assets/app.js?v=4', 'assets/style.css?v=4', 'assets/mark.svg']
+  const sw = readFileSync(new URL('./src/sw.js', import.meta.url), 'utf8')
+  const fingerprint = createHash('sha256').update(sw)
+  for (const path of publicPages) {
+    const filename = path.split('?')[0]
+    fingerprint.update(readFileSync(new URL(filename === '' || filename.endsWith('/') ? filename + 'index.html' : filename, dist)))
+  }
+  save('sw.js', 'const publicPages = ' + JSON.stringify(publicPages) +
+    '\nconst version = ' + JSON.stringify(fingerprint.digest('hex').slice(0, 12)) + '\n' + sw)
 }
 if (site) {
   save('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + paths.map(path => '<url><loc>' + esc(site + '/' + path) + '</loc></url>').join('') + '</urlset>')

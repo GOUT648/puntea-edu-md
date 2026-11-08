@@ -15,9 +15,9 @@ const options = (values, value) => Object.entries(values).map(([key, name]) =>
 const back = `<a class="back" href="${root}">← Comunitate</a>`
 
 export function page(title, content, status = 200) {
-  return new Response(`<!doctype html><html lang="ro-MD"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${e(title)} · Puntea Edu MD</title><link rel="icon" href="/assets/mark.svg"><link rel="stylesheet" href="/assets/style.css?v=3"></head>
-<body><a class="skip" href="#continut">Sari la conținut</a><header class="site-header wrap"><a class="brand" href="/"><img width="36" height="36" alt="" src="/assets/mark.svg"><span>Puntea Edu <small>MD</small></span></a><nav aria-label="Navigare principală"><a href="/#catalog">Catalog</a><a href="/documentatie/#module">Parcurs</a><a href="${root}cont/">Cont</a></nav></header>
-<main id="continut" class="wrap subpage">${content}</main><footer class="site-footer wrap"><a href="/documentatie/#module">Cele șase module</a><a href="https://github.com/GOUT648/puntea-edu-md/blob/main/docs/PLATFORMA.md">Ghidul platformei</a></footer></body></html>`, {
+  return new Response(`<!doctype html><html lang="ro-MD"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f5ec"><title>${e(title)} · Puntea Edu MD</title><link rel="icon" href="/assets/mark.svg"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/app-192.png"><link rel="stylesheet" href="/assets/style.css?v=4"><script defer src="/assets/app.js?v=4"></script></head>
+<body><a class="skip" href="#continut">Sari la conținut</a><header class="site-header wrap"><a class="brand" href="/"><img width="36" height="36" alt="" src="/assets/mark.svg"><span>Puntea Edu <small>MD</small></span></a><nav aria-label="Navigare principală"><a href="/#catalog">Caută</a><a href="${root}">Comunitate</a><a href="${root}cont/">Cont</a></nav></header>
+<main id="continut" class="wrap subpage">${content}</main><footer class="site-footer wrap"><a href="/documentatie/#module">Parcurs</a><a href="/documentatie/#instalare">Instalează aplicația</a></footer></body></html>`, {
     status,
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
@@ -74,10 +74,10 @@ export function account(profile, posts, moderator, waiting, next) {
   ${waiting ? '<p role="status">Propunerea este în verificare. Decizia apare aici.</p>' : ''}
   <section class="panel"><h2>Profil</h2><form class="community-filter" method="post" action="${root}cont/">
     <input type="hidden" name="next" value="${e(next)}">
-    <label>Rol declarat <select name="role" required>${options(roles, profile?.role)}</select></label><button class="button">Salvează profilul</button>
+    <label>Tip de cont <select name="role" required><option value="" disabled${profile ? '' : ' selected'}>Alege</option>${options(roles, profile?.role)}</select></label><button class="button">Salvează profilul</button>
   </form></section>
   ${profile ? `<div class="handoff">${button(root + 'scrie/', 'Propune un material')}${button(root + 'recomandari/', 'Recomandările mele')}${moderator ? button(root + 'moderare/', 'Moderare') : ''}<a target="_top" href="/signout-with-chatgpt?return_to=%2Fcomunitate%2F">Ieși din cont</a></div>
-  <section class="panel"><h2>Materialele mele</h2>${list ? `<ul class="personal-list">${list}</ul>` : '<p>Aici vei vedea starea materialelor trimise.</p>'}</section>` : '<p>Salvează rolul ca să trimiți prima propunere.</p>'}`)
+  <section class="panel"><h2>Materialele mele</h2>${list ? `<ul class="personal-list">${list}</ul>` : '<p>Aici vei vedea starea materialelor trimise.</p>'}</section>` : '<p>Tipul de cont rămâne privat.</p>'}`)
 }
 
 export function compose({ kind, context, contextTitle, values = {}, error = '', id, revision }) {
@@ -113,24 +113,24 @@ export function compose({ kind, context, contextTitle, values = {}, error = '', 
 
 export function postPage(post, context, viewer, related, sentReport) {
   const source = `<a class="button" href="${e(post.source_url)}" target="_blank" rel="noopener noreferrer">Deschide sursa ↗</a>`
-  return page(post.title, `${back}<p class="eyebrow">M1 · ${e(postTypes[post.kind])}</p><h1>${e(post.title)}</h1>
+  return page(post.title, `${back}<p class="eyebrow">${e(postTypes[post.kind])}</p><h1>${e(post.title)}</h1>
   <p class="intro">${e(post.summary)}</p>
   <div class="sheet"><div>
     <p>Public · ${e(audiences[post.audience])}</p>
     ${post.organizer ? `<p>Organizator · ${e(post.organizer)}</p>` : ''}
-    ${post.kind === 'anunt' ? `<p>M4 · Înscriere · ${post.deadline ? e(dateLabel(post.deadline)) : '<a href="' + e(post.source_url) + '">Verifică termenul în sursă</a>'}</p>` : ''}
-    ${post.event_date ? `<p>M4 · Activitate · ${e(dateLabel(post.event_date))}</p>` : ''}
-    ${post.method ? `<p><strong>M5 · Metodă</strong><br>${e(post.method)}</p><p><strong>Limite</strong><br>${e(post.limits)}</p>` : ''}
+    ${post.kind === 'anunt' ? `<p>Înscriere · ${post.deadline ? e(dateLabel(post.deadline)) : '<a href="' + e(post.source_url) + '">Verifică termenul în sursă</a>'}</p>` : ''}
+    ${post.event_date ? `<p>Activitate · ${e(dateLabel(post.event_date))}</p>` : ''}
+    ${post.method ? `<p><strong>Metodă</strong><br>${e(post.method)}</p><p><strong>Limite</strong><br>${e(post.limits)}</p>` : ''}
   </div><div class="next">${source}${post.deadline || post.event_date ? `<a class="text-button" href="calendar.ics">Salvează în calendar</a>` : ''}</div></div>
   <div class="handoff">
-    ${context ? `<a href="${e(context.href)}">M1 · ${e(context.title)}</a>` : ''}
-    <a href="/o/mentorat-inel/">M2 · Mentorat</a>
-    <a href="${e(context?.practice ?? root + 'p/' + post.id + '/practica.txt')}">M3 · Practică</a>
-    <a href="${root}scrie/?tip=cercetare&amp;fisa=${e(context ? post.context_id : 'p-' + post.id)}">M5 · Propune o observație</a>
+    ${context ? `<a href="${e(context.href)}">${e(context.title)}</a>` : ''}
+    <a href="/o/mentorat-inel/">Mentorat</a>
+    <a href="${e(context?.practice ?? root + 'p/' + post.id + '/practica.txt')}">Fișa de practică</a>
+    <a href="${root}scrie/?tip=cercetare&amp;fisa=${e(context ? post.context_id : 'p-' + post.id)}">Propune o observație</a>
   </div>
   ${related.length ? `<section><h2>Pe aceeași fișă</h2><ul>${related.map(p => `<li><a href="${root}p/${e(p.id)}/">${e(p.title)}</a></li>`).join('')}</ul></section>` : ''}
   ${sentReport ? '<p role="status">Semnalarea a fost înregistrată.</p>' : ''}
-  <details class="archive"><summary>M6 · Semnalează o problemă</summary>
+  <details class="archive"><summary>Semnalează o problemă</summary>
   ${viewer ? `<form class="entry-form" action="${root}p/${e(post.id)}/semnaleaza/" method="post"><label>Ce trebuie verificat?<textarea name="reason" maxlength="400" required rows="2"></textarea></label><button class="button">Trimite</button></form>` : `<p><a target="_top" href="${sign('p/' + post.id + '/')}">Intră în cont pentru a semnala</a></p>`}
   </details>`)
 }
