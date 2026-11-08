@@ -7,116 +7,122 @@
   <link rel="canonical" href="https://gout648.github.io/puntea-edu-md/"><meta property="og:url" content="https://gout648.github.io/puntea-edu-md/">
   <meta property="og:title" content="De la idee la clasă · Puntea Edu MD"><meta property="og:description" content="Oportunități, mentori și activități pentru școlile din Republica Moldova. Catalog pilot DigiEduHack.">
   <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/style.css"><script src="./assets/app.js" defer></script>
+  <link rel="stylesheet" href="./assets/style.css?v=3"><script src="./assets/app.js?v=3" defer></script>
 </head>
 <body>
   <a class="skip" href="#continut">Sari la conținut</a>
   <header class="site-header wrap">
     <a class="brand" href="./"><img src="./assets/mark.svg" width="36" height="36" alt=""><span>Puntea Edu <small>MD</small></span></a>
-    <nav aria-label="Navigare principală"><a class="" href="./#catalog">Catalog</a><a class="" href="./documentatie/#module">Cele 6 module</a></nav>
+    <nav aria-label="Navigare principală"><a class="" href="./#catalog">Caută</a><a class="" href="./documentatie/#module">Parcurs</a><a class="" href="https://puntea-edu-md-v1.reedycivet4.chatgpt.site/comunitate/">Comunitate</a><a class="" href="https://puntea-edu-md-v1.reedycivet4.chatgpt.site/comunitate/cont/">Cont</a></nav>
   </header>
   <main id="continut"><div class="wrap home">
-  <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">REPUBLICA MOLDOVA</p>
-      <h1>De la idee<br> la <em>clasă.</em></h1>
-      <p>Oportunități, mentori și activități pentru școală.</p>
-      <form class="search-form" data-search-form action="./#catalog" method="get" role="search">
-        <label for="cautare" class="sr-only">Caută în catalog</label><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4 4"/></svg>
-        <input id="cautare" type="search" name="q" placeholder="De exemplu, matematică" autocomplete="off" maxlength="120">
-        <button class="button" type="submit">Găsește <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
-      </form>
-    </div>
-    <img class="hero-art" src="./assets/bridge.svg" width="504" height="392" alt="">
+  <section class="search-home" id="catalog" aria-labelledby="search-title">
+    <p class="eyebrow">FORMARE CONTINUĂ · REPUBLICA MOLDOVA</p>
+    <h1 id="search-title">Ce vrei să găsești?</h1>
+    <p class="intro">Cursuri, concursuri și proiecte pentru profesori și școli.</p>
+    <form class="catalog-controls" data-search-form data-community="https://puntea-edu-md-v1.reedycivet4.chatgpt.site/comunitate/" action="./#catalog" method="get" role="search">
+      <div class="search-form"><label for="cautare" class="sr-only">Caută în catalog</label><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4 4"/></svg>
+        <input id="cautare" type="search" name="q" placeholder="Caută un concurs, o formare sau o competență…" autocomplete="off" maxlength="80">
+        <button class="button" type="submit">Caută</button>
+      </div>
+      <div class="filter-row">
+        <div class="chips" role="group" aria-label="Categorie">
+          <button type="button" class="chip" data-filter-category="" aria-pressed="true">Toate</button><button type="button" class="chip" data-filter-category="formari" aria-pressed="false">Cursuri</button><button type="button" class="chip" data-filter-category="concursuri" aria-pressed="false">Concursuri</button><button type="button" class="chip" data-filter-category="comunitati" aria-pressed="false">Comunități</button><button type="button" class="chip" data-filter-category="evenimente" aria-pressed="false">Evenimente</button><button type="button" class="chip" data-filter-category="finantari" aria-pressed="false">Granturi</button><button type="button" class="chip" data-filter-category="proiecte" aria-pressed="false">Proiecte</button>
+          <details class="extra-filters"><summary>Mai multe</summary><div class="chips"><button type="button" class="chip" data-filter-category="mentorat" aria-pressed="false">Mentorat</button><button type="button" class="chip" data-filter-category="cercetari" aria-pressed="false">Cercetări</button><button type="button" class="chip" data-filter-category="resurse" aria-pressed="false">Resurse</button><button type="button" class="chip" data-filter-category="activitati" aria-pressed="false">Activități</button></div></details>
+        </div>
+        <label class="audience-filter"><span>Public</span><select name="public"><option value="">Toți</option><option value="elevi">Elevi</option><option value="profesori">Profesori</option><option value="scoli">Școli</option><option value="companii">Companii</option></select></label>
+      </div>
+    </form>
+    <div class="handoff quick-links"><a href="https://curriculum.lappsus.com/">Busola Curriculară ↗</a><a href="./o/mentorat-inel/">Mentorat INEL</a><a href="https://puntea-edu-md-v1.reedycivet4.chatgpt.site/comunitate/recomandari/">Recomandări pentru mine</a><a href="./documentatie/#module">Parcursul comun <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div>
   </section>
-  <nav class="module-rail" aria-label="Contribuțiile modulelor">
-    <a href="./documentatie/#m1"><span class="tag tag-1" title="Vizibilitatea oportunităților">M1</span>Catalog</a><a href="./documentatie/#m2"><span class="tag tag-2" title="Vizibilitatea expertizei">M2</span>Mentor</a><a href="./documentatie/#m3"><span class="tag tag-3" title="Comunități și continuitate">M3</span>Practică</a><a href="./documentatie/#m4"><span class="tag tag-4" title="Coordonare și trasee">M4</span>Calendar</a><a href="./documentatie/#m5"><span class="tag tag-5" title="Evidență și cercetare">M5</span>Dovadă</a><a href="./documentatie/#m6"><span class="tag tag-6" title="Feedback și guvernanță">M6</span>Guvernanță</a>
-  </nav>
-  <section class="catalog" id="catalog" aria-labelledby="catalog-title">
+  <section class="catalog" aria-labelledby="catalog-title">
     <div class="section-head"><h2 id="catalog-title" tabindex="-1">Catalog</h2><p role="status" data-results>16 fișe</p></div>
     <ul class="offers">
-      <li data-record data-search="matematica ecuatii clasa a VII-a activitate practica profesori elevi curriculum gimnaziu"><a class="offer featured" href="./solutie/#exemplu">
+      <li data-record data-category="activitati" data-audience="profesori elevi" data-search="matematica ecuatii clasa a VII-a activitate practica profesori elevi curriculum gimnaziu UC 4.6"><a class="offer featured" href="./solutie/#exemplu">
         <span class="offer-type">Activitate · Clasa a VII-a</span><strong>Ecuații de gradul I</strong><span class="offer-date">Exemplu pilot</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
       </a></li>
-      <li data-record data-search="Concursul european de eseuri CICDE · APPF Concurs Câte o clasă per instituție. Elevii participanți au minimum 16 ani, iar clasa lucrează cu unul sau doi profesori. O clasă din fiecare instituție poate participa la concursul european. Profesorul coordonează preînscrierea. parlament europa democratie eseuri video liceu Elevi Profesori Școli"><a class="offer" href="./o/concurs-european-eseuri/">
+      <li data-record data-category="concursuri" data-audience="elevi profesori scoli" data-search="Concursul european de eseuri CICDE · APPF Concurs Concursuri Câte o clasă per instituție. Elevii participanți au minimum 16 ani, iar clasa lucrează cu unul sau doi profesori. O clasă din fiecare instituție poate participa la concursul european. Profesorul coordonează preînscrierea. parlament europa democratie eseuri video liceu Elevi Profesori Școli"><a class="offer" href="./o/concurs-european-eseuri/">
     <span class="offer-type">Concurs · CICDE · APPF</span>
     <strong>Concursul european de eseuri</strong>
     <span class="offer-date"><span class="status" data-status="deadline" data-deadline="2026-11-15">Termen publicat</span>
       15 nov. 2026</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Educație digitală și incluziune financiară Tekwill în fiecare școală Program Licee din Republica Moldova. Aplicația este depusă de instituție. Apel pentru licee care vor să găzduiască sesiuni despre serviciile financiare digitale. liceu tekwill educatie digitala financiar bani Școli"><a class="offer" href="./o/tekwill-incluziune-financiara/">
+  </a></li><li data-record data-category="proiecte" data-audience="scoli" data-search="Educație digitală și incluziune financiară Tekwill în fiecare școală Program Proiecte Licee din Republica Moldova. Aplicația este depusă de instituție. Apel pentru licee care vor să găzduiască sesiuni despre serviciile financiare digitale. liceu tekwill educatie digitala financiar bani Școli"><a class="offer" href="./o/tekwill-incluziune-financiara/">
     <span class="offer-type">Program · Tekwill în fiecare școală</span>
     <strong>Educație digitală și incluziune financiară</strong>
     <span class="offer-date"><span class="status" data-status="deadline" data-deadline="2026-11-20">Termen publicat</span>
       20 nov. 2026</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="DOR de Tradiții Biroul relații cu diaspora Program Tineri din diaspora, 13–17 ani, cu română la nivel conversațional de bază. Program de iarnă pentru adolescenți din diaspora care vor să descopere tradiții din Republica Moldova. iarna traditii limba romana tabara diaspora bursa Elevi"><a class="offer" href="./o/dor-de-traditii/">
+  </a></li><li data-record data-category="evenimente" data-audience="elevi" data-search="DOR de Tradiții Biroul relații cu diaspora Program Evenimente Tineri din diaspora, 13–17 ani, cu română la nivel conversațional de bază. Program de iarnă pentru adolescenți din diaspora care vor să descopere tradiții din Republica Moldova. iarna traditii limba romana tabara diaspora bursa Elevi"><a class="offer" href="./o/dor-de-traditii/">
     <span class="offer-type">Program · Biroul relații cu diaspora</span>
     <strong>DOR de Tradiții</strong>
     <span class="offer-date"><span class="status" data-status="deadline" data-deadline="2026-11-30">Termen publicat</span>
       30 nov. 2026</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Webinar „Școala eTwinning” eTwinning Moldova · UTM Formare Cadre didactice și manageri din învățământul preuniversitar. Sesiune online despre recunoașterea instituțiilor implicate în eTwinning. online colaborare proiect scoala manager echipa Profesori Școli"><a class="offer" href="./o/scoala-etwinning/">
+  </a></li><li data-record data-category="formari" data-audience="profesori scoli" data-search="Webinar „Școala eTwinning” eTwinning Moldova · UTM Formare Cursuri Cadre didactice și manageri din învățământul preuniversitar. Sesiune online despre recunoașterea instituțiilor implicate în eTwinning. online colaborare proiect scoala manager echipa Profesori Școli"><a class="offer" href="./o/scoala-etwinning/">
     <span class="offer-type">Formare · eTwinning Moldova · UTM</span>
     <strong>Webinar „Școala eTwinning”</strong>
     <span class="offer-date"><span class="status" data-status="check">De confirmat</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Parteneri pentru primul proiect eTwinning eTwinning Moldova · UTM Comunitate Cadre didactice din învățământul primar, la început de parcurs eTwinning. Serie de întâlniri online pentru învățători care caută parteneri pentru primul proiect. primar online proiect schimb colaborare practica cerc Profesori"><a class="offer" href="./o/parteneri-etwinning/">
+  </a></li><li data-record data-category="comunitati" data-audience="profesori" data-search="Parteneri pentru primul proiect eTwinning eTwinning Moldova · UTM Comunitate Comunități Cadre didactice din învățământul primar, la început de parcurs eTwinning. Serie de întâlniri online pentru învățători care caută parteneri pentru primul proiect. primar online proiect schimb colaborare practica cerc Profesori"><a class="offer" href="./o/parteneri-etwinning/">
     <span class="offer-type">Comunitate · eTwinning Moldova · UTM</span>
     <strong>Parteneri pentru primul proiect eTwinning</strong>
     <span class="offer-date"><span class="status" data-status="check">De confirmat</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Mold SEF 2027 ANCE · Ordinul MEC nr. 2093 Concurs Elevi din clasele VII–XII, conform calendarului aprobat. Concurs din calendarul republican, pentru proiecte de știință și inginerie. stiinta inginerie proiect steam robotica competitie Elevi Școli"><a class="offer" href="./o/mold-sef-2027/">
+  </a></li><li data-record data-category="concursuri" data-audience="elevi scoli" data-search="Mold SEF 2027 ANCE · Ordinul MEC nr. 2093 Concurs Concursuri Elevi din clasele VII–XII, conform calendarului aprobat. Concurs din calendarul republican, pentru proiecte de știință și inginerie. stiinta inginerie proiect steam robotica competitie Elevi Școli"><a class="offer" href="./o/mold-sef-2027/">
     <span class="offer-type">Concurs · ANCE · Ordinul MEC nr. 2093</span>
     <strong>Mold SEF 2027</strong>
     <span class="offer-date"><span class="status" data-status="calendar">Calendar oficial</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Olimpiada Republicană la Matematică ANCE · Ordinul MEC nr. 2093 Concurs Elevi din clasele VII–XII la etapa republicană, conform ordinului. Etapa republicană are calendar aprobat. Etapa raională, municipală sau zonală cu teste unice este la 6 decembrie 2026. mate matematica raion liceu gimnaziu selectie concurs Elevi Școli"><a class="offer" href="./o/matematica-2027/">
+  </a></li><li data-record data-category="concursuri" data-audience="elevi scoli" data-search="Olimpiada Republicană la Matematică ANCE · Ordinul MEC nr. 2093 Concurs Concursuri Elevi din clasele VII–XII la etapa republicană, conform ordinului. Etapa republicană are calendar aprobat. Etapa raională, municipală sau zonală cu teste unice este la 6 decembrie 2026. mate matematica raion liceu gimnaziu selectie concurs Elevi Școli"><a class="offer" href="./o/matematica-2027/">
     <span class="offer-type">Concurs · ANCE · Ordinul MEC nr. 2093</span>
     <strong>Olimpiada Republicană la Matematică</strong>
     <span class="offer-date"><span class="status" data-status="calendar">Calendar oficial</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Managementul proiectelor UPSC · Centrul de Formare Continuă și Leadership Formare Cadre didactice și cadre de conducere. Modul tematic online din oferta de formare continuă, cu 3 credite indicate de furnizor. upsc online manager proiect formare credite Profesori Școli"><a class="offer" href="./o/management-proiecte-upsc/">
+  </a></li><li data-record data-category="formari" data-audience="profesori scoli" data-search="Managementul proiectelor UPSC · Centrul de Formare Continuă și Leadership Formare Cursuri Cadre didactice și cadre de conducere. Modul tematic online din oferta de formare continuă, cu 3 credite indicate de furnizor. upsc online manager proiect formare credite Profesori Școli"><a class="offer" href="./o/management-proiecte-upsc/">
     <span class="offer-type">Formare · UPSC · Centrul de Formare Continuă și Leadership</span>
     <strong>Managementul proiectelor</strong>
     <span class="offer-date"><span class="status" data-status="check">De confirmat</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Mentorat online INEL Institutul Național pentru Educație și Leadership Mentorat Cadre didactice din învățământul general. Serviciu-pilot unde poți cere sprijin pentru o problemă concretă de la clasă. mentor mentorat sprijin evaluare formativa incluziune adaptare debutant Profesori"><a class="offer" href="./o/mentorat-inel/">
+  </a></li><li data-record data-category="mentorat" data-audience="profesori" data-search="Mentorat online INEL Institutul Național pentru Educație și Leadership Mentorat Mentorat Cadre didactice din învățământul general. Serviciu-pilot unde poți cere sprijin pentru o problemă concretă de la clasă. mentor mentorat sprijin evaluare formativa incluziune adaptare debutant Profesori"><a class="offer" href="./o/mentorat-inel/">
     <span class="offer-type">Mentorat · Institutul Național pentru Educație și Leadership</span>
     <strong>Mentorat online INEL</strong>
     <span class="offer-date"><span class="status" data-status="resource">Resursă</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Catalogul de formări Clasa Viitorului Clasa Viitorului · UPSC Formare Cadre didactice. Publicul și condițiile depind de program. Programe de dezvoltare profesională cu informații despre format, limbă, ore și credite unde sunt publicate. formare curs digital credite profesori stem Profesori"><a class="offer" href="./o/clasa-viitorului/">
+  </a></li><li data-record data-category="formari" data-audience="profesori" data-search="Catalogul de formări Clasa Viitorului Clasa Viitorului · UPSC Formare Cursuri Cadre didactice. Publicul și condițiile depind de program. Programe de dezvoltare profesională cu informații despre format, limbă, ore și credite unde sunt publicate. formare curs digital credite profesori stem Profesori"><a class="offer" href="./o/clasa-viitorului/">
     <span class="offer-type">Formare · Clasa Viitorului · UPSC</span>
     <strong>Catalogul de formări Clasa Viitorului</strong>
     <span class="offer-date"><span class="status" data-status="resource">Resursă</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Programul de Granturi Școlare Ministerul Educației și Cercetării Finanțare Instituții de învățământ general. Pagina consultată descrie proiecte deja selectate. Pagina de implementare a programului, cu manual operațional și documente pentru instituțiile școlare. finantare sponsori grant buget scoala proiect Școli"><a class="offer" href="./o/granturi-scolare/">
+  </a></li><li data-record data-category="finantari" data-audience="scoli" data-search="Programul de Granturi Școlare Ministerul Educației și Cercetării Finanțare Granturi Instituții de învățământ general. Pagina consultată descrie proiecte deja selectate. Pagina de implementare a programului, cu manual operațional și documente pentru instituțiile școlare. finantare sponsori grant buget scoala proiect Școli"><a class="offer" href="./o/granturi-scolare/">
     <span class="offer-type">Finanțare · Ministerul Educației și Cercetării</span>
     <strong>Programul de Granturi Școlare</strong>
     <span class="offer-date"><span class="status" data-status="resource">Resursă</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Planul de formare continuă 2026 Ministerul Educației și Cercetării Plan Cadre didactice și cadre de conducere. Consultă apelul fiecărei ediții. Planul național include programe obligatorii și opționale. Apelurile sunt anunțate etapizat. plan calendar formare minister mec inel crap Profesori Școli"><a class="offer" href="./o/plan-formare-2026/">
+  </a></li><li data-record data-category="resurse" data-audience="profesori scoli" data-search="Planul de formare continuă 2026 Ministerul Educației și Cercetării Plan Resurse Cadre didactice și cadre de conducere. Consultă apelul fiecărei ediții. Planul național include programe obligatorii și opționale. Apelurile sunt anunțate etapizat. plan calendar formare minister mec inel crap Profesori Școli"><a class="offer" href="./o/plan-formare-2026/">
     <span class="offer-type">Plan · Ministerul Educației și Cercetării</span>
     <strong>Planul de formare continuă 2026</strong>
     <span class="offer-date"><span class="status" data-status="resource">Resursă</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="DigiProf A și B Ministerul Educației și Cercetării Formare Cadre didactice din preșcolar, primar, gimnazial și liceal. Program gratuit pentru dezvoltarea competențelor digitale ale cadrelor didactice. digital digiprof calculator curs Profesori"><a class="offer" href="./o/digiprof-ab/">
+  </a></li><li data-record data-category="formari" data-audience="profesori" data-search="DigiProf A și B Ministerul Educației și Cercetării Formare Cursuri Cadre didactice din preșcolar, primar, gimnazial și liceal. Program gratuit pentru dezvoltarea competențelor digitale ale cadrelor didactice. digital digiprof calculator curs Profesori"><a class="offer" href="./o/digiprof-ab/">
     <span class="offer-type">Formare · Ministerul Educației și Cercetării</span>
     <strong>DigiProf A și B</strong>
     <span class="offer-date"><span class="status" data-status="closed" data-deadline="2026-10-30">Termen trecut</span>
       30 oct. 2026</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="STEAMˣ „Idei care mișcă” Clasa Viitorului Concurs Echipe din clasele V–XII, alături de un profesor mentor. Concurs național de proiecte STEAM pentru echipe de elevi, cu sprijinul unui profesor mentor. steam stem concurs proiect elev mentor tehnologie Elevi Profesori Școli"><a class="offer" href="./o/steam-idei-care-misca/">
+  </a></li><li data-record data-category="concursuri" data-audience="elevi profesori scoli" data-search="STEAMˣ „Idei care mișcă” Clasa Viitorului Concurs Concursuri Echipe din clasele V–XII, alături de un profesor mentor. Concurs național de proiecte STEAM pentru echipe de elevi, cu sprijinul unui profesor mentor. steam stem concurs proiect elev mentor tehnologie Elevi Profesori Școli"><a class="offer" href="./o/steam-idei-care-misca/">
     <span class="offer-type">Concurs · Clasa Viitorului</span>
     <strong>STEAMˣ „Idei care mișcă”</strong>
     <span class="offer-date"><span class="status" data-status="closed" data-deadline="2026-11-05">Termen trecut</span>
       5 nov. 2026</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-  </a></li><li data-record data-search="Școala de Toamnă eTwinning 2026 eTwinning Moldova · UTM Formare Cadre didactice. Detaliile se verifică la organizator. Apelul afișează evenimentul în 2026 și un termen de înscriere în 2025. termen contradictie conflict toamna etwinning curs Profesori"><a class="offer" href="./o/scoala-de-toamna-etwinning/">
+  </a></li><li data-record data-category="evenimente" data-audience="profesori" data-search="Școala de Toamnă eTwinning 2026 eTwinning Moldova · UTM Formare Evenimente Cadre didactice. Detaliile se verifică la organizator. Apelul afișează evenimentul în 2026 și un termen de înscriere în 2025. termen contradictie conflict toamna etwinning curs Profesori"><a class="offer" href="./o/scoala-de-toamna-etwinning/">
     <span class="offer-type">Formare · eTwinning Moldova · UTM</span>
     <strong>Școala de Toamnă eTwinning 2026</strong>
     <span class="offer-date"><span class="status" data-status="conflict">Date contradictorii</span>
       </span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
   </a></li>
     </ul>
-    <p data-empty hidden>Nu am găsit o fișă. Încearcă o temă mai scurtă.</p>
+    <p data-empty hidden>Nu am găsit rezultate în catalog cu aceste filtre.</p>
+    <section data-community-results hidden aria-labelledby="community-results-title"><h3 id="community-results-title">Din Comunitate</h3><ul class="offers" data-community-list></ul><a data-community-more href="https://puntea-edu-md-v1.reedycivet4.chatgpt.site/comunitate/">Mai multe rezultate</a></section>
   </section>
+  <section class="brief"><h2>Șase module. O fișă.</h2><p>Găsești o oportunitate, ceri sprijin, încerci la clasă și documentezi ce a funcționat.</p>
+  <nav class="module-rail" aria-label="Contribuțiile modulelor"><a href="./documentatie/#m1"><span class="tag tag-1" title="Vizibilitatea oportunităților">M1</span>Catalog</a><a href="./documentatie/#m2"><span class="tag tag-2" title="Vizibilitatea expertizei">M2</span>Mentor</a><a href="./documentatie/#m3"><span class="tag tag-3" title="Comunități și continuitate">M3</span>Practică</a><a href="./documentatie/#m4"><span class="tag tag-4" title="Coordonare și trasee">M4</span>Calendar</a><a href="./documentatie/#m5"><span class="tag tag-5" title="Evidență și cercetare">M5</span>Dovadă</a><a href="./documentatie/#m6"><span class="tag tag-6" title="Feedback și guvernanță">M6</span>Guvernanță</a></nav></section>
 </div></main>
   <footer class="site-footer wrap"><span>Puntea Edu MD <span aria-hidden="true">·</span> Pilot DigiEduHack</span><span><a class="" href="./documentatie/#surse">Surse</a> · <a class="" href="https://github.com/GOUT648/puntea-edu-md" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></span></footer>
 </body>
